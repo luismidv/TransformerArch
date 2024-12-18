@@ -21,10 +21,10 @@ class MultiHeadAttention(nn.Module):
         self.d_k = model_dimension // num_heads
 
         #Linear layers for transformations
-        self.W_query = nn.Linear(model_dimension, model_dimension)
-        self.W_key = nn.Linear(model_dimension, model_dimension)
-        self.W_value = nn.Linear(model_dimension, model_dimension)
-        self.W_output = nn.Linear(model_dimension,model_dimension)
+        self.w_query = nn.Linear(model_dimension, model_dimension)
+        self.w_key = nn.Linear(model_dimension, model_dimension)
+        self.w_value = nn.Linear(model_dimension, model_dimension)
+        self.w_output = nn.Linear(model_dimension,model_dimension)
 
     def scale_dotproduct_attention(self,query, key, values, mask = None):
         atention_scores = torch.matmul(query, key.transpose(-2,1)) / math.sqrt(self.d_k)
@@ -46,9 +46,9 @@ class MultiHeadAttention(nn.Module):
     
     def forward(self,query,key,value,mask = None):
         #LINEAR TRANSFORMATION AND SPLIT INTO HEADS
-        query = self.split_heads(self.W_query(query))
-        key = self.split_heads(self.W_key(key))
-        value = self.split_heads(self.W_value(value))
+        query = self.split_heads(self.w_query(query))
+        key = self.split_heads(self.w_key(key))
+        value = self.split_heads(self.w_value(value))
 
         atention_output = self.scale_dotproduct_attention(query,key,value,mask)
 
